@@ -1,17 +1,27 @@
 import { View, Text, StyleSheet, Pressable, DimensionValue, Image } from 'react-native';
 import { CarsProps } from '../../types/cars.type';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackParamList } from '../../routes';
 
-interface CarItemProps{
+interface CarItemProps {
     data: CarsProps;
     widthScreen: DimensionValue;
 }
 
-export function CarItem({ data, widthScreen }: CarItemProps){
-    return(
-        <Pressable style={[styles.container, { width: widthScreen }]} >
+export function CarItem({ data, widthScreen }: CarItemProps) {    
+    const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
+
+    function handleNavigate() {
+        navigation.navigate("detail", { id: data.id });
+    }
+
+    return (
+        <Pressable style={[styles.container, { width: widthScreen }]} onPress={handleNavigate}>
             <Image
                 style={styles.cover}
                 source={{ uri: data.images[0].url }}
+                resizeMode="cover"
             />
 
             <Text style={styles.title} >{data.name}</Text>
@@ -32,7 +42,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginBottom: 14,
     },
-    cover:{
+    cover: {
         width: '100%',
         height: 140,
         borderRadius: 4,
