@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { Header } from '../../components/header';
 import { Input } from '../../components/input';
+import { CarItem } from '../../components/carlist';
 import { CarsProps } from '../../types/cars.type';
 import { db } from '../../services/firebaseConnection';
 import { collection, orderBy, query, where, getDocs, doc } from 'firebase/firestore';
@@ -57,6 +58,21 @@ export function Home() {
                     />
                 </View>
 
+                { loading && (
+                    <ActivityIndicator style={{ marginTop: 14 }} size="large" color="#000" />
+                )}
+
+                <FlatList
+                    data={cars}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <CarItem data={item} widthScreen={ cars.length <= 1 ? "100%" : "49%"} /> }
+                    style={styles.list}
+                    numColumns={2}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                    contentContainerStyle={{ paddingBottom: 14 }}
+                    showsVerticalScrollIndicator={false}
+                />
+
             </View>
         </>
     )
@@ -77,5 +93,10 @@ const styles = StyleSheet.create({
         padding: 8,
         backgroundColor: "#FFF",
         borderRadius: 8,
+    },
+    list: {
+        flex: 1,
+        marginTop: 4,
+        paddingTop: 14,
     }
 })
