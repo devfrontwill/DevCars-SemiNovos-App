@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { BannerList } from './components/bannerlist';
+import { Label } from './components/label';
 
 type RouteDetailParams = {
     detail: { id: string; };
@@ -76,13 +77,37 @@ export function Detail() {
                     <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                         <Feather name="arrow-left" size={36} color="#ff0000" />
                     </Pressable>
-                    
+
                     {!loading && car?.images && (
                         <BannerList
                             images={car.images}
-                            handleOpenImage={ (imageUrl) => {console.log(imageUrl)}}
+                            handleOpenImage={(imageUrl) => { console.log(imageUrl) }}
                         />
                     )}
+
+                    <View style={styles.header}>
+                        <Pressable style={styles.saveContent}>
+                            <Feather size={22} color="#FFF" name="bookmark" />
+                        </Pressable>
+
+                        <Text style={styles.title} >{car?.name}</Text>
+                        <Text>{car?.model}</Text>
+                    </View>
+
+                    <View style={styles.content} >
+                        <Text style={styles.price}> R$ {car?.price} </Text>
+
+                        <View style={styles.labels}>
+                            <Label label="Cidade : " name={car?.city} />
+                            <Label label="Ano : " name={car?.year} />
+                        </View>
+
+                        <View style={styles.labels}>
+                            <Label label="Kilometragem : " name={car?.km} />
+                            <Label label="Telefone : " name={car?.whatsapp} />
+                        </View>
+
+                    </View>
 
                 </View>
             </SafeAreaView>
@@ -108,5 +133,50 @@ const styles = StyleSheet.create({
         left: 24,
         top: 44,
         zIndex: 99,
-    }
+    },
+    header: {
+        backgroundColor: "#FFF",
+        position: 'relative',
+        width: '90%',
+        borderRadius: 8,
+        gap: 4,
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingLeft: 8,
+        paddingRight: 8,
+        top: -34,
+        zIndex: 999,
+    },
+    saveContent: {
+        backgroundColor: "#EF4444",
+        position: 'absolute',
+        zIndex: 99,
+        padding: 12,
+        borderRadius: 99,
+        right: 8,
+        top: -24
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    content: {
+        alignSelf: 'flex-start',
+        paddingLeft: 14,
+        paddingRight: 14,
+        marginTop: -14,
+        width: '100%'
+    },
+    price: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: "#000",
+    },
+    labels: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 24,
+        marginTop: 14,
+    },
+
 })
