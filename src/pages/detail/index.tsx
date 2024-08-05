@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Pressable, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Pressable, FlatList, ScrollView, Modal } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackParamList } from '../../routes/index';
 import { CarDetailProps } from '../../types/cars.type';
@@ -10,6 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { BannerList } from './components/bannerlist';
 import { Label } from './components/label';
+import * as Linking from 'expo-linking';
+import { ModalBanner } from './components/modal';
 
 type RouteDetailParams = {
     detail: { id: string; };
@@ -23,6 +25,8 @@ export function Detail() {
 
     const [car, setCar] = useState<CarDetailProps>()
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedImage, setSelectedImage] = useState("");
 
     useEffect(() => {
 
@@ -62,6 +66,20 @@ export function Detail() {
 
     }, [route.params.id])
 
+    async function handleCallPhone() {
+        await Linking.openURL(`tel: ${car?.whatsapp}`)
+    }
+
+    function openImage(imageUrl: string){
+        setModalVisible(true);
+        setSelectedImage(imageUrl);
+    }
+
+    function handleCloseModal(){
+        setModalVisible(false);
+        setSelectedImage("");
+    }
+
     if (loading) {
         return (
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
@@ -81,7 +99,7 @@ export function Detail() {
                     {!loading && car?.images && (
                         <BannerList
                             images={car.images}
-                            handleOpenImage={(imageUrl) => { console.log(imageUrl) }}
+                            handleOpenImage={(imageUrl) => openImage(imageUrl)}
                         />
                     )}
 
@@ -107,7 +125,23 @@ export function Detail() {
                             <Label label="Telefone : " name={car?.whatsapp} />
                         </View>
 
+                        <Text style={styles.description}>Descrição completa:</Text>
+                        <View style={styles.descriptionArea}>
+                            <Text>{car?.description}</Text>
+                        </View>
+
+                        <Pressable style={styles.callButton} onPress={handleCallPhone}>
+                            <Text style={styles.callText}>Conversar com vendedor</Text>
+                        </Pressable>
+
                     </View>
+
+                    <Modal visible={modalVisible} transparent={true}>
+                        <ModalBanner
+                            closeModal={handleCloseModal}
+                            imageUrl={selectedImage}
+                        />
+                    </Modal>
 
                 </View>
             </SafeAreaView>
@@ -178,5 +212,31 @@ const styles = StyleSheet.create({
         gap: 24,
         marginTop: 14,
     },
+    description: {
+        fontSize: 18,
+        marginTop: 14,
+        marginBottom: 8,
+        fontWeight: 'bold',
+        color: "#000"
+    },
+    descriptionArea: {
+        backgroundColor: "#FFF",
+        padding: 4,
+        borderRadius: 4,
+    },
+    callButton: {
+        width: '100%',
+        padding: 8,
+        backgroundColor: "#08c168",
+        marginTop: 14,
+        marginBottom: 14,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    callText: {
+        fontSize: 16,
+        fontWeight: '500'
+    }
 
 })
