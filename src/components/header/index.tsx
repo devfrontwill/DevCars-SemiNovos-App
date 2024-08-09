@@ -22,7 +22,7 @@ export function Header() {
             />
 
             <Pressable style={styles.button} onPress={handleNavigateFavorite}>
-                <Feather name="bookmark" size={24} color="#FFF" />
+                <Feather name="bookmark" size={24} color="#FF0000" />
             </Pressable>
         </SafeAreaView>
     )
