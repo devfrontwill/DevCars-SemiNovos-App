@@ -17,7 +17,7 @@ export function Favorites() {
 
 
     useEffect(() => {
-        async function loadFavoriteCars(){
+        async function loadFavoriteCars() {
             const listCars = await getItem();
             setCars(listCars);
         }
@@ -25,10 +25,15 @@ export function Favorites() {
         loadFavoriteCars();
     }, [isFocused])
 
+    async function handleRemoveCar(id: string){
+        const listcars = await removeItem(id);
+        setCars(listcars);
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Pressable onPress={() => navigation.goBack()}> 
+                <Pressable onPress={() => navigation.goBack()}>
                     <Feather name='arrow-left' size={33} color='#FF0000' />
                 </Pressable>
                 <Text style={styles.title}>Meus Favoritos</Text>
@@ -37,7 +42,14 @@ export function Favorites() {
             <FlatList
                 data={cars}
                 keyExtractor={(item) => item.id}
-                renderItem={({item}) => <CarItem data={item} widthScreen={"100%"} />}
+                renderItem={({ item }) => (
+                    <CarItem
+                        data={item}
+                        widthScreen={"100%"}
+                        enableRemove={true}
+                        removeItem={() => handleRemoveCar(item.id)}
+                    />
+                )}
                 contentContainerStyle={{ paddingBottom: 14 }}
                 showsVerticalScrollIndicator={false}
             />
