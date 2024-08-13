@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, FlatList, Keyboard } from 'react-native';
 import { Header } from '../../components/header';
 import { Input } from '../../components/input';
 import { CarItem } from '../../components/carlist';
@@ -45,6 +45,7 @@ export function Home() {
             })
     }
 
+    //funcao que aplica a tecnica debounce
     const debounce = (func: (...args: string[]) => void, delay: number) => {
         let timeout: NodeJS.Timeout | null = null;
 
@@ -64,13 +65,47 @@ export function Home() {
         delayedApiCall(text)
     }
 
+    //funcao que completa a aplicação da tecnica debounce
     const delayedApiCall = useCallback(
         debounce(async (newText:string) => await fetchSearchCar(newText), 1000),
         []
     )
 
+    //funcao para buscar os items pesquisados no banco de dados.
     async function fetchSearchCar(newText: string){
-        console.log(newText)
+        if(newText === ""){
+            await loadCars();
+            setSearchInput("");
+            return;
+        }
+
+        setCars([]);
+
+        //metodo do firebase que busca os dados de acordo com a comparação definida
+        const q = query(collection(db, "cars"),
+            where("name", ">=", newText.toLocaleUpperCase()),
+            where("name", "<=", newText.toLocaleUpperCase() + "\uf8ff"),
+        )
+
+        const querySnapshot = await getDocs(q);
+
+        let listcars = [] as CarsProps[];
+
+        querySnapshot.forEach((doc) => {
+            listcars.push({
+                id: doc.id,
+                name: doc.data().name,
+                year: doc.data().year,
+                km: doc.data().km,
+                price: doc.data().price,
+                uid: doc.data().uid,
+                city: doc.data().city,
+                images: doc.data().images,
+            })
+        })
+
+        setCars(listcars);
+        Keyboard.dismiss();
     }
 
 
