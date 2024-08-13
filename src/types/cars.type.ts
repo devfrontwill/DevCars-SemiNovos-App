@@ -4,7 +4,7 @@ export interface CarsProps {
   year: string;
   km: string;
   city: string;
-  price: string | number;
+  price:  string;
   uid: string;
   images: CarImageProps[];
 }
@@ -19,8 +19,8 @@ export interface CarDetailProps{
   id: string;
   name: string;
   model: string;
-  price: string | number;
-  year: string | number;
+  price: string;
+  year: string;
   city: string;
   km: string;
   description: string;

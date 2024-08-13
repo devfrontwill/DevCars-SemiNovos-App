@@ -8,13 +8,14 @@ import { StackParamList } from '../../routes';
 import { CarsProps } from '../../types/cars.type';
 import { CarItem } from '../../components/carlist';
 import useStorage from '../../hooks/useStorage';
+import { useToast } from '../../hooks/useToast';
 
 export function Favorites() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
     const [cars, setCars] = useState<CarsProps[]>([])
     const { getItem, removeItem } = useStorage();
     const isFocused = useIsFocused();
-
+    const { showToast } = useToast();
 
     useEffect(() => {
         async function loadFavoriteCars() {
@@ -28,6 +29,8 @@ export function Favorites() {
     async function handleRemoveCar(id: string){
         const listcars = await removeItem(id);
         setCars(listcars);
+
+        showToast("Carro removido da sua lista !", "DEFAULT");
     }
 
     return (

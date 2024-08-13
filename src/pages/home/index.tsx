@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { Header } from '../../components/header';
 import { Input } from '../../components/input';
@@ -45,6 +45,35 @@ export function Home() {
             })
     }
 
+    const debounce = (func: (...args: string[]) => void, delay: number) => {
+        let timeout: NodeJS.Timeout | null = null;
+
+        return (...args: string[]) => {
+            if(timeout){
+                clearInterval(timeout);
+            }
+
+            timeout = setTimeout(() => {
+                func(...args)
+            }, delay)
+        }
+    }
+
+    function handleInputChange(text: string) {
+        setSearchInput(text)
+        delayedApiCall(text)
+    }
+
+    const delayedApiCall = useCallback(
+        debounce(async (newText:string) => await fetchSearchCar(newText), 1000),
+        []
+    )
+
+    async function fetchSearchCar(newText: string){
+        console.log(newText)
+    }
+
+
     return (
         <>
             <Header />
@@ -54,18 +83,18 @@ export function Home() {
                     <Input
                         placeholder='Procurando algum veiculo ?'
                         value={searchInput}
-                        onChangeText={(text) => setSearchInput(text)}
+                        onChangeText={(text) => handleInputChange(text)}
                     />
                 </View>
 
-                { loading && (
+                {loading && (
                     <ActivityIndicator style={{ marginTop: 14 }} size="large" color="#000" />
                 )}
 
                 <FlatList
                     data={cars}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <CarItem data={item} widthScreen={ cars.length <= 1 ? "100%" : "49%"} /> }
+                    renderItem={({ item }) => <CarItem data={item} widthScreen={cars.length <= 1 ? "100%" : "49%"} />}
                     style={styles.list}
                     numColumns={2}
                     columnWrapperStyle={{ justifyContent: "space-between" }}

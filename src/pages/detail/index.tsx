@@ -13,6 +13,7 @@ import { Label } from './components/label';
 import * as Linking from 'expo-linking';
 import { ModalBanner } from './components/modal';
 import useStorage from '../../hooks/useStorage';
+import { useToast } from '../../hooks/useToast';
 
 type RouteDetailParams = {
     detail: { id: string; };
@@ -29,6 +30,7 @@ export function Detail() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedImage, setSelectedImage] = useState("");
     const { saveItem } = useStorage();
+    const {showToast} = useToast();
 
     useEffect(() => {
 
@@ -94,6 +96,7 @@ export function Detail() {
         if(!car) return;
 
         await saveItem(car);
+        showToast("Carro salvo na sua lista ! ",  "SUCCESS")
     }
 
     return (
