@@ -18,10 +18,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#080808"
-      }
+      },
+      "package": "com.devfrontwill.DevCars_SemiNovos"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c42ee832-4208-4897-9092-abca60f567e6"
+      }
     }
   }
 }
