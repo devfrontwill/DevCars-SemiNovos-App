@@ -5,7 +5,11 @@ import { ToastProvider } from './src/context/toastContext';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
-SplashScreen.hideAsync();
+
+  setTimeout(() => {
+    SplashScreen.hideAsync();
+  }, 2000);
+
 
 export default function App() {
   return (
