@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "DevCars SemiNovos",
-    "slug": "DevCars_SemiNovos",
+    "name": "DevCars",
+    "slug": "DevCars SemiNovos",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
