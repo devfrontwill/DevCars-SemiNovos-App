@@ -2,6 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Routes } from './src/routes';
 import { ToastProvider } from './src/context/toastContext';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   return (
