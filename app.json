@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "resize",
       "backgroundColor": "#080808"
     },
     "ios": {
@@ -17,7 +17,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#080808"
+        "backgroundColor": "#fff"
       },
       "package": "com.devfrontwill.DevCars_SemiNovos"
     },
